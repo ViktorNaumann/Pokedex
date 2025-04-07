@@ -4,10 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
     <script src="./script.js"></script>
 </head>
-<body>
+<body onload="init()">
+
+    <header>
+
+        <img src="./img/logo-header.png" alt="Pokedex Logo">
+
+        <img src="./img/pokemon-1536848_640.png" alt="">
+
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Suche nach Pokémon...">
+            <button id="search-button">Suchen</button>
+        </div>
+
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="pokemon-list"></div>
+        </div>
+    </main>
+
+    <footer>
+
+    </footer>
     
 </body>
 </html>
