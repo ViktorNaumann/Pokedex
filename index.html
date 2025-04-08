@@ -6,7 +6,8 @@
     <title>Pokedex</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./bg_pokemon.css">
-    <script src="./script.js"></script>
+    <link rel="stylesheet" href="./spinner.css">
+    <link rel="stylesheet" href="./button.css">
 </head>
 <body onload="init()">
 
@@ -23,7 +24,10 @@
 
     </header>
 
-    <div id="spinner" class="spinner hidden"></div>
+    <div id="spinner-overlay" class="spinner-overlay hidden">
+        <div class="spinner"></div>
+      </div>
+      
 
     <main>
         <div class="container">
@@ -31,9 +35,19 @@
         </div>
     </main>
 
-    <footer>
+    <div id="pokemon-details" class="hidden">
+        <button id="close-button">X</button>
+        <div id="details-content"></div>
+    </div>
 
+    <div class="load-more-container">
+        <button onclick="loadMorePokemon()" id="load-more-button">Mehr Pokémon laden</button>
+    </div>
+
+    <footer>
+        <img src="./img/logo-header.png" alt="Pokedex Logo">
     </footer>
     
+    <script src="./script.js"></script>
 </body>
 </html>
