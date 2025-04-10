@@ -12,42 +12,34 @@
 <body onload="init()">
 
     <header>
-
-        <img onclick="init()" src="./img/logo-header.png" alt="Pokedex Logo">
-
-        <img src="./img/pokemon-1536848_640.png" alt="">
-
+        <img onclick="init()" src="./img/logo-header.png" alt="Pokedex Logo" style="cursor: pointer;">
+        <img onclick="init()" src="./img/pokemon-1536848_640.png" alt="Pokemon Ball" style="cursor: pointer;">
         <div class="search-container">
-            <input type="text" id="search" placeholder="Suche nach Pokémon...">
+            <div class="container">
+                <input id="search" required="" type="text" name="text" class="input">
+                <label class="label">Suche nach Pokémon...</label>
+            </div>
             <button onclick="searchPokemon()" id="search-button">Suchen</button>
         </div>
-
     </header>
-
     <div id="spinner-overlay" class="spinner-overlay hidden">
         <div class="spinner"></div>
-      </div>
-      
-
+    </div>
     <main>
         <div class="container">
             <div id="pokemon-list"></div>
         </div>
     </main>
-
     <div id="pokemon-details" class="hidden">
         <button id="close-button">X</button>
         <div id="details-content"></div>
     </div>
-
     <div class="load-more-container">
         <button onclick="loadMorePokemon()" id="load-more-button">Mehr Pokémon laden</button>
     </div>
-
     <footer>
         <img src="./img/logo-header.png" alt="Pokedex Logo">
     </footer>
-    
     <script src="./script.js"></script>
 </body>
 </html>

@@ -6,7 +6,6 @@ function init() {
 
 async function getData() {
   const spinner = document.getElementById("spinner-overlay");
-
   spinner.classList.remove("hidden");
   for (let i = 1; i <= 20; i++) {
     await getPokemon(i);
@@ -33,7 +32,6 @@ function templateHtmlRenderPokemon(data) {
 async function loadMorePokemon() {
   const spinner = document.getElementById("spinner-overlay");
   spinner.classList.remove("hidden");
-
   const startIndex = allPokemonData.length + 1;
   const endIndex = startIndex + 19;
 
@@ -47,30 +45,20 @@ async function searchPokemon() {
   const searchInput = document.getElementById("search").value.toLowerCase();
   const pokemonList = document.getElementById("pokemon-list");
   const spinner = document.getElementById("spinner-overlay");
-
   pokemonList.innerHTML = "";
   spinner.classList.remove("hidden");
-
   await getPokemon(searchInput);
-
   spinner.classList.add("hidden");
 }
 
-
-
-
-async function getPokemon(query) {
-  const url = `https://pokeapi.co/api/v2/pokemon/${query}`;
+async function getPokemon(i) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
   const response = await fetch(url);
-
   if (url.status === 404) {
     alert("Pokemon existiert nicht!");
     return;
   }
-
-  //console.log(response);
   const data = await response.json();
-  //console.log(data);
   createCard(data);
   allPokemonData.push(data);
 }
