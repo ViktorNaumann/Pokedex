@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="./bg_pokemon.css">
     <link rel="stylesheet" href="./spinner.css">
     <link rel="stylesheet" href="./button.css">
+    <link rel="stylesheet" href="./overlay.css">
+    <link rel="stylesheet" href="./input_field.css">
+    <link rel="stylesheet" href="./pokemon_card.css">
 </head>
 <body onload="init()">
-
     <header>
-        <img onclick="init()" src="./img/logo-header.png" alt="Pokedex Logo" style="cursor: pointer;">
-        <img onclick="init()" src="./img/pokemon-1536848_640.png" alt="Pokemon Ball" style="cursor: pointer;">
+        <img onclick="resetToStartView()" src="./img/logo-header.png" alt="Pokedex Logo" style="cursor: pointer;">
+        <img onclick="resetToStartView()" src="./img/pokemon-1536848_640.png" alt="Pokemon Ball" style="cursor: pointer;">
         <div class="search-container">
             <div class="container">
                 <input id="search" required="" type="text" name="text" class="input">
@@ -31,7 +33,6 @@
         </div>
     </main>
     <div id="pokemon-details" class="hidden">
-        <button id="close-button">X</button>
         <div id="details-content"></div>
     </div>
     <div class="load-more-container">
