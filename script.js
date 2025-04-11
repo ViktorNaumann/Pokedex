@@ -1,5 +1,6 @@
 let allPokemonData = [];
 let allPokemonName = [];
+let searchedPokemonData = [];
 
 // Initialisierung der Seite
 async function init() {
@@ -22,20 +23,7 @@ function createCard(data) {
   const pokemonList = document.getElementById("pokemon-list");
   pokemonList.innerHTML += templateHtmlRenderPokemon(data);
 }
-// HTML-Template für ein Pokémon
-function templateHtmlRenderPokemon(data) {
-  const animatedSprite =data.sprites.versions["generation-v"]["black-white"].animated.front_default;
-  const defaultSprite = data.sprites.front_default;
-  const sprite = animatedSprite || defaultSprite || "fallback-image-url.png"; // falls sogar das fehlt
-  return /*html*/ `
-    <div class="pokemon-card bg_${data.types[0].type.name}" onclick="showDetails(${data.id})">
-      <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
-      <img src="${sprite}">
-      <p><strong>#${data.id}</strong></p>
-      <p><strong>Typ: ${data.types.map((typeInfo) => typeInfo.type.name).join(", ")}</strong></p>
-    </div>
-`;
-}
+
 // Mehr Pokémon laden (Pagination)
 async function loadMorePokemon() {
   const spinner = document.getElementById("spinner-overlay");
@@ -53,20 +41,19 @@ async function getPokemon(i, shouldSave = true) {
   const response = await fetch(url);
   if (!response.ok) {
     alert("Pokémon existiert nicht!");
-    return;
+    return null;
   }
   const data = await response.json();
   createCard(data);
-  // Prüfen, ob speichern soll
   if (shouldSave) {
-    const alreadyExists = allPokemonData.some(
-      (pokemon) => pokemon.id === data.id
-    );
+    const alreadyExists = allPokemonData.some(pokemon => pokemon.id === data.id);
     if (!alreadyExists) {
       allPokemonData.push(data);
     }
   }
+  return data;
 }
+
 // Alle Pokémon-Namen für die Suche laden
 async function loadAllPokemonNames() {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10000");
@@ -77,27 +64,38 @@ async function loadAllPokemonNames() {
 async function searchPokemon() {
   const searchInput = document.getElementById("search").value.toLowerCase();
   const pokemonList = document.getElementById("pokemon-list");
+
   if (searchInput === "") {
     pokemonList.innerHTML = "";
     allPokemonData = []; // Array leeren für frischen Start
     await getData();
     return;
   }
+
   pokemonList.innerHTML = "";
+  searchedPokemonData = []; // Hier leerst du das Array für eine neue Suche!
+
   const filteredPokemon = allPokemonName.filter((pokemon) =>
     pokemon.toLowerCase().startsWith(searchInput)
   );
+
   if (filteredPokemon.length === 0) {
     alert("Kein Pokémon gefunden!");
     return;
   }
+
   const spinner = document.getElementById("spinner-overlay");
   spinner.classList.remove("hidden");
+
   for (const pokemon of filteredPokemon) {
-    await getPokemon(pokemon, false); // <- Wichtig: Nicht speichern!
+    const data = await getPokemon(pokemon, false); // wichtig: Rückgabe vom getPokemon nutzen
+    if (data) {
+      searchedPokemonData.push(data); // Hier speichern!
+    }
   }
   spinner.classList.add("hidden");
 }
+
 // Event-Listener für automatische Rückkehr zur Startansicht
 function setupAutoResetSearch() {
   const searchInput = document.getElementById("search");
@@ -115,62 +113,18 @@ function resetToStartView() {
 }
 
 function showDetails(pokemonId) {
-  const pokemon = allPokemonData.find((pokemon) => pokemon.id === pokemonId);
+  let pokemon = allPokemonData.find(p => p.id === pokemonId);
+  if (!pokemon) {
+    pokemon = searchedPokemonData.find(p => p.id === pokemonId);
+  }
   if (!pokemon) {
     alert("Pokémon nicht gefunden!");
     return;
   }
   const detailsContainer = document.getElementById("details-content");
   detailsContainer.innerHTML = templateHtmlRenderDetails(pokemon);
-  const overlay = document.getElementById("pokemon-details");
-  overlay.classList.remove("hidden");
-  document.body.classList.add("no-scroll"); // ⬅️ Scroll deaktivieren
-}
-
-function templateHtmlRenderDetails(pokemon) {
-  const abilities = pokemon.abilities.map((ability) => ability.ability.name).join(", ");
-  const types = pokemon.types.map((type) => type.type.name).join(", ");
-  const primaryType = pokemon.types[0].type.name;
-
-  const stats = pokemon.stats.map(stat => `
-    <div class="stat">
-      <span>${stat.stat.name.toUpperCase()}</span>
-      <div class="stat-bar">
-        <div class="stat-bar-fill" style="width: ${stat.base_stat}px;"></div>
-      </div>
-      <span>${stat.base_stat}</span>
-    </div>
-  `).join("");
-
-  return /*html*/ `
-    <div class="details-card">
-      <div class="arrow left-arrow" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>
-
-      <div class="details-header bg_${primaryType}">
-        <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
-        <img src="${pokemon.sprites.front_default}">
-        <p><strong>#${pokemon.id}</strong></p>
-      </div>
-
-      <div class="details-content">
-        <div class="tabs">
-          <button onclick="showTab('about')">About</button>
-          <button onclick="showTab('stats')">Base Stats</button>
-        </div>
-        <div id="about-tab" class="tab-content">
-          <p><strong>Typ:</strong> ${types}</p>
-          <p><strong>Fähigkeiten:</strong> ${abilities}</p>
-          <p><strong>Größe:</strong> ${pokemon.height / 10} m</p>
-          <p><strong>Gewicht:</strong> ${pokemon.weight / 10} kg</p>
-        </div>
-        <div id="stats-tab" class="tab-content hidden">
-          ${stats}
-        </div>
-      </div>
-
-      <div class="arrow right-arrow" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>
-    </div>
-  `;
+  document.getElementById("pokemon-details").classList.remove("hidden");
+  document.body.classList.add("no-scroll");
 }
 
 function closeDetails() {
@@ -178,7 +132,6 @@ function closeDetails() {
   overlay.classList.add("hidden");
   document.body.classList.remove("fixed-position");
   document.body.classList.remove("no-scroll");
-  window.scrollTo(0, scrollPosition);
   document.body.style.top = '';
 }
 // Hier dein Event Listener:
@@ -210,10 +163,8 @@ function showNextPokemon(currentId) {
 function showTab(tabName) {
   const aboutTab = document.getElementById("about-tab");
   const statsTab = document.getElementById("stats-tab");
-
   aboutTab.classList.add("hidden");
   statsTab.classList.add("hidden");
-
   if (tabName === "about") {
     aboutTab.classList.remove("hidden");
   } else if (tabName === "stats") {
