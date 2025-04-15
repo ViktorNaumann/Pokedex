@@ -1,8 +1,7 @@
-// HTML-Template für ein Pokémon
 function templateHtmlRenderPokemon(data) {
     const animatedSprite =data.sprites.versions["generation-v"]["black-white"].animated.front_default;
     const defaultSprite = data.sprites.front_default;
-    const sprite = animatedSprite || defaultSprite || "fallback-image-url.png"; // falls sogar das fehlt
+    const sprite = animatedSprite || defaultSprite || "fallback-image-url.png";
     return /*html*/ `
       <div class="pokemon-card bg_${data.types[0].type.name}" onclick="showDetails(${data.id})">
         <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
@@ -13,11 +12,12 @@ function templateHtmlRenderPokemon(data) {
   `;
   }
 
-// HTML-Template für die Pokémon-Details
-function templateHtmlRenderDetails(pokemon) {
+function templateHtmlRenderDetails(pokemon, allData) {
     const abilities = pokemon.abilities.map((ability) => ability.ability.name).join(", ");
     const types = pokemon.types.map((type) => type.type.name).join(", ");
     const primaryType = pokemon.types[0].type.name;
+    const isFirst = pokemon.id === allData[0].id;
+    const isLast = pokemon.id === allData[allData.length - 1].id;
   
     const stats = pokemon.stats.map(stat => `
       <div class="stat">
@@ -31,7 +31,7 @@ function templateHtmlRenderDetails(pokemon) {
   
     return /*html*/ `
       <div class="details-card">
-        <div class="arrow left-arrow" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>
+        ${!isFirst ? `<div class="arrow left-arrow" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>` : ""}
   
         <div class="details-header bg_${primaryType}">
           <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
@@ -55,7 +55,7 @@ function templateHtmlRenderDetails(pokemon) {
           </div>
         </div>
   
-        <div class="arrow right-arrow" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>
+        ${!isLast ? `<div class="arrow right-arrow" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>` : ""}
       </div>
     `;
   }
