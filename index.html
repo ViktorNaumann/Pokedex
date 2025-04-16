@@ -16,29 +16,33 @@
 </head>
 <body onload="init()">
     <header>
-        <img onclick="resetToStartView()" src="./img/logo-header.png" alt="Pokedex Logo" style="cursor: pointer;">
-        <img onclick="resetToStartView()" src="./img/pokemon-1536848_640.png" alt="Pokemon Ball" style="cursor: pointer;">
-        <div class="search-container">
+        <div class="page-container header-inner">
+          <img onclick="resetToStartView()" src="./img/logo-header.png" alt="Pokedex Logo" style="cursor: pointer;">
+          <img onclick="resetToStartView()" src="./img/pokemon-1536848_640.png" alt="Pokemon Ball" style="cursor: pointer;">
+          <div class="search-container">
             <div class="container">
-                <input id="search" required="" type="text" name="text" class="input">
-                <label class="label">Suche nach Pokémon...</label>
+              <input id="search" required="" type="text" name="text" class="input">
+              <label class="label">Search for Pokemon...</label>
             </div>
-            <button onclick="searchPokemon()" id="search-button">Suchen</button>
+            <button onclick="searchPokemon()" id="search-button">Search</button>
+          </div>
         </div>
-    </header>
+      </header>      
     <div id="spinner-overlay" class="spinner-overlay hidden">
         <div class="spinner"></div>
     </div>
     <main>
-        <div class="container">
+        <div class="page-container">
+          <div class="container">
             <div id="pokemon-list"></div>
+          </div>
         </div>
-    </main>
+      </main>
     <div id="pokemon-details" class="hidden">
         <div id="details-content"></div>
     </div>
     <div class="load-more-container">
-        <button onclick="loadMorePokemon()" id="load-more-button">Mehr Pokémon laden</button>
+        <button onclick="loadMorePokemon()" id="load-more-button">Load more Pokemon</button>
     </div>
     <footer>
         <img src="./img/logo-header.png" alt="Pokedex Logo">

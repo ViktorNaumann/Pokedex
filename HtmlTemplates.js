@@ -7,7 +7,7 @@ function templateHtmlRenderPokemon(data) {
         <h2>${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h2>
         <img src="${sprite}">
         <p><strong>#${data.id}</strong></p>
-        <p><strong>Typ: ${data.types.map((typeInfo) => typeInfo.type.name).join(", ")}</strong></p>
+        <p><strong>Type: ${data.types.map((typeInfo) => typeInfo.type.name).join(", ")}</strong></p>
       </div>
   `;
   }
@@ -30,7 +30,7 @@ function templateHtmlRenderDetails(pokemon, allData) {
   
     return /*html*/ `
       <div class="details-card">
-        ${!isFirst ? `<div class="arrow left-arrow" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>` : ""}
+      <div class="arrow left-arrow${isFirst ? " hidden" : ""}" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>
         <div class="details-header bg_${primaryType}">
           <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
           <img src="${pokemon.sprites.front_default}">
@@ -42,16 +42,16 @@ function templateHtmlRenderDetails(pokemon, allData) {
             <button onclick="showTab('stats')">Base Stats</button>
           </div>
           <div id="about-tab" class="tab-content">
-            <p><strong>Typ:</strong> ${types}</p>
-            <p><strong>Fähigkeiten:</strong> ${abilities}</p>
-            <p><strong>Größe:</strong> ${pokemon.height / 10} m</p>
-            <p><strong>Gewicht:</strong> ${pokemon.weight / 10} kg</p>
+            <p><strong>Type:</strong> ${types}</p>
+            <p><strong>Abilities:</strong> ${abilities}</p>
+            <p><strong>Height:</strong> ${pokemon.height / 10} m</p>
+            <p><strong>Weight:</strong> ${pokemon.weight / 10} kg</p>
           </div>
           <div id="stats-tab" class="tab-content hidden">
             ${stats}
           </div>
         </div>
-        ${!isLast ? `<div class="arrow right-arrow" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>` : ""}
+        <div class="arrow right-arrow${isLast ? " hidden" : ""}" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>
       </div>
     `;
   }

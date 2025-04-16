@@ -37,7 +37,7 @@ async function getPokemon(i, shouldSave = true) {
   const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
   const response = await fetch(url);
   if (!response.ok) {
-    alert("Pokémon existiert nicht!");
+    alert("The Pokemon does not exist!");
     return null;
   }
   const data = await response.json();
@@ -78,11 +78,13 @@ async function resetSearch() {
 async function searchPokemon() {
   const input = document.getElementById("search").value.toLowerCase();
   const list = document.getElementById("pokemon-list");
+  const loadMoreButton = document.getElementById("load-more-button");
   if (!input) return resetSearch();
   const filtered = allPokemonName.filter(name => name.startsWith(input));
-  if (!filtered.length) return alert("Kein Pokémon gefunden!");
+  if (!filtered.length) return alert("No Pokemon found!");
   list.innerHTML = "";
   searchedPokemonData = [];
+  loadMoreButton.parentElement.classList.add("hidden");
   await fetchAndDisplayFilteredPokemon(filtered);
 }
 
@@ -97,8 +99,10 @@ function setupAutoResetSearch() {
 
 function resetToStartView() {
   const pokemonList = document.getElementById("pokemon-list");
+  const loadMoreButton = document.getElementById("load-more-button");
   pokemonList.innerHTML = "";
   allPokemonData.forEach((pokemon) => createCard(pokemon));
+  loadMoreButton.parentElement.classList.remove("hidden");
 }
 
 function showDetails(pokemonId) {
@@ -107,7 +111,7 @@ function showDetails(pokemonId) {
     pokemon = searchedPokemonData.find(p => p.id === pokemonId);
   }
   if (!pokemon) {
-    alert("Pokémon nicht gefunden!");
+    alert("No Pokemon found!");
     return;
   }
   const detailsContainer = document.getElementById("details-content");

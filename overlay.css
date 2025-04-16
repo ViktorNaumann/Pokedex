@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.64);
   z-index: 1000;
@@ -27,6 +27,12 @@
   width: 80%;
   max-width: 600px;
   z-index: 1001;
+  max-height: 90vh;
+  overflow: visible;
+}
+
+.details-header {
+  text-align: center;
 }
 
 .details-card img {
@@ -38,8 +44,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 0 50px;
+  gap: 20px;
 }
+
 
 .details-content-inner {
   text-align: center;
@@ -47,16 +56,25 @@
 }
 
 .arrow {
-  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 32px;
   color: white;
-  padding: 0 10px;
+  cursor: pointer;
   user-select: none;
-  transition: transform 0.2s ease;
 }
 
-.arrow:hover {
-  transform: scale(1.2);
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
+}
+
+.arrow.hidden {
+  visibility: hidden;
 }
 
 .tabs {
@@ -126,19 +144,16 @@
 
 @media (max-width: 600px) {
   #details-content {
-    width: 95%;
-    max-width: 95%;
     padding: 12px;
     font-size: 14px;
-    overflow-y: auto;
     max-height: 90vh;
+    overflow: hidden;
   }
 
   .details-card {
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
+    padding: 0 16px;
+  
   }
 
   .details-card img {
@@ -147,8 +162,9 @@
   }
 
   .arrow {
-    font-size: 26px;
-    padding: 5px;
+    position: static;
+    transform: none;
+    margin: 10px 0;
   }
 
   .tabs {
@@ -162,45 +178,50 @@
     font-size: 14px;
   }
 
-  .stat {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .stat span:first-child,
-  .stat span:last-child {
-    width: auto;
-    font-size: 13px;
-  }
-
-  .stat-bar {
+  .tab-content {
     width: 100%;
-    margin: 5px 0;
+  }
+
+  #about-tab p {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  #stats-tab {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 5px 0;
+    width: 100%;
   }
 
   #stats-tab .stat {
-    font-size: 12px;
-    margin-bottom: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+    margin-bottom: 4px;
   }
 
   #stats-tab .stat span:first-child {
     width: 60px;
-    font-size: 11px;
+    font-size: 10px;
   }
 
   #stats-tab .stat span:last-child {
     width: 25px;
-    font-size: 11px;
+    font-size: 10px;
+    text-align: right;
   }
 
   #stats-tab .stat-bar {
-    height: 6px;
-    margin: 0 6px;
+    flex-grow: 1;
+    height: 5px;
+    margin: 0 4px;
   }
 
   #stats-tab .stat-bar-fill {
     height: 100%;
   }
-}
 }

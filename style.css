@@ -1,36 +1,54 @@
 html {
   background-color: rgb(5, 23, 30);
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 h2 {
   font-size: clamp(14px, 4vw, 24px);
 }
 
+.tab-content p {
+  word-break: break-word;
+  white-space: normal;
+  margin-bottom: 8px;
+  max-width: 100%;
+}
+
+
 body {
-  max-width: 1440px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  flex-grow: 1;
   background-color: rgb(5, 23, 30);
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 150px;
   background-color: rgb(8, 32, 41);
   color: white;
   padding: 10px 0;
   text-align: center;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 }
 
 header img {
@@ -63,7 +81,6 @@ footer img {
   margin-right: 20px;
 }
 
-/* From Uiverse.io by AmIt-DasIT */ 
 .container {
   display: flex;
   flex-direction: column;
@@ -81,11 +98,31 @@ footer img {
   pointer-events: none;
 }
 
+#pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 @media (max-width: 768px) {
   header {
     flex-direction: column;
     height: auto;
     padding: 10px;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    width: 100%;
   }
 
   header img {
@@ -102,12 +139,6 @@ footer img {
   .container {
     width: 100%;
     align-items: center;
-  }
-
-  #pokemon-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .pokemon-card {
@@ -129,7 +160,6 @@ footer img {
   footer {
     flex-direction: column;
     height: auto;
-    padding: 10px;
   }
 
   footer img {
@@ -144,7 +174,6 @@ footer img {
   }
 }
 
-/* Kleine Handys (max 480px) */
 @media (max-width: 480px) {
   .pokemon-card {
     width: 90px;
@@ -155,8 +184,16 @@ footer img {
     height: 50px;
   }
 
+  .page-container {
+    padding: 0 12px;
+  }
+
   header img {
     height: 50px;
+  }
+
+  .header-inner {
+    gap: 8px;
   }
 
   button {
@@ -173,7 +210,6 @@ footer img {
   }
 }
 
-/* Sehr kleine Bildschirme bis 320px */
 @media (max-width: 320px) {
   header img {
     height: 40px;
