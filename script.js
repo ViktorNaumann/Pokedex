@@ -26,7 +26,7 @@ async function loadMorePokemon() {
   const spinner = document.getElementById("spinner-overlay");
   spinner.classList.remove("hidden");
   const startIndex = allPokemonData.length + 1;
-  const endIndex = startIndex + 19;
+  const endIndex = Math.min(startIndex + 19, 1025);
   for (let i = startIndex; i <= endIndex; i++) {
     await getPokemon(i);
   }
@@ -51,7 +51,7 @@ async function getPokemon(i, shouldSave = true) {
 }
 
 async function loadAllPokemonNames() {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10000");
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
   const data = await response.json();
   allPokemonName = data.results.map((pokemon) => pokemon.name);
 }
@@ -61,11 +61,13 @@ async function fetchAndDisplayFilteredPokemon(filteredPokemon) {
   spinner.classList.remove("hidden");
   for (const name of filteredPokemon) {
     const data = await getPokemon(name, false);
-    if (data) {
-      searchedPokemonData.push(data);}
+    if (data && data.id <= 1025) {
+      searchedPokemonData.push(data);
+    }
   }
   spinner.classList.add("hidden");
 }
+
 
 async function resetSearch() {
   document.getElementById("pokemon-list").innerHTML = "";
@@ -83,7 +85,6 @@ async function searchPokemon() {
   searchedPokemonData = [];
   await fetchAndDisplayFilteredPokemon(filtered);
 }
-
 
 function setupAutoResetSearch() {
   const searchInput = document.getElementById("search");

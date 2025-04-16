@@ -18,7 +18,6 @@ function templateHtmlRenderDetails(pokemon, allData) {
     const primaryType = pokemon.types[0].type.name;
     const isFirst = pokemon.id === allData[0].id;
     const isLast = pokemon.id === allData[allData.length - 1].id;
-  
     const stats = pokemon.stats.map(stat => `
       <div class="stat">
         <span>${stat.stat.name.toUpperCase()}</span>
@@ -32,13 +31,11 @@ function templateHtmlRenderDetails(pokemon, allData) {
     return /*html*/ `
       <div class="details-card">
         ${!isFirst ? `<div class="arrow left-arrow" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>` : ""}
-  
         <div class="details-header bg_${primaryType}">
           <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
           <img src="${pokemon.sprites.front_default}">
           <p><strong>#${pokemon.id}</strong></p>
         </div>
-  
         <div class="details-content">
           <div class="tabs">
             <button onclick="showTab('about')">About</button>
@@ -54,7 +51,6 @@ function templateHtmlRenderDetails(pokemon, allData) {
             ${stats}
           </div>
         </div>
-  
         ${!isLast ? `<div class="arrow right-arrow" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>` : ""}
       </div>
     `;
