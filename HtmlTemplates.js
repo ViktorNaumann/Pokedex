@@ -30,7 +30,6 @@ function templateHtmlRenderDetails(pokemon, allData) {
   
     return /*html*/ `
       <div class="details-card">
-      <div class="arrow left-arrow${isFirst ? " hidden" : ""}" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>
         <div class="details-header bg_${primaryType}">
           <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
           <img src="${pokemon.sprites.front_default}">
@@ -51,7 +50,10 @@ function templateHtmlRenderDetails(pokemon, allData) {
             ${stats}
           </div>
         </div>
-        <div class="arrow right-arrow${isLast ? " hidden" : ""}" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>
+        <div class="details-nav">
+          <div class="arrow left-arrow${isFirst ? " hidden" : ""}" onclick="showPreviousPokemon(${pokemon.id})">&#8592;</div>
+          <div class="arrow right-arrow${isLast ? " hidden" : ""}" onclick="showNextPokemon(${pokemon.id})">&#8594;</div>
+        </div>
       </div>
     `;
   }

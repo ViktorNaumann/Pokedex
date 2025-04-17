@@ -1,3 +1,4 @@
+// Optimierter script.js
 let allPokemonData = [];
 let allPokemonName = [];
 let searchedPokemonData = [];
@@ -19,7 +20,11 @@ async function getData() {
 
 function createCard(data) {
   const pokemonList = document.getElementById("pokemon-list");
-  pokemonList.innerHTML += templateHtmlRenderPokemon(data);
+  const existingCard = document.getElementById(`pokemon-${data.id}`);
+  if (!existingCard) {
+    const cardHTML = templateHtmlRenderPokemon(data);
+    pokemonList.innerHTML += cardHTML.replace('<div class="pokemon-card', `<div id="pokemon-${data.id}" class="pokemon-card`);
+  }
 }
 
 async function loadMorePokemon() {
@@ -34,6 +39,8 @@ async function loadMorePokemon() {
 }
 
 async function getPokemon(i, shouldSave = true) {
+  const existing = allPokemonData.find(p => p.id === i || p.name === i) || searchedPokemonData.find(p => p.id === i || p.name === i);
+  if (existing) return existing;
   const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
   const response = await fetch(url);
   if (!response.ok) {
@@ -42,10 +49,8 @@ async function getPokemon(i, shouldSave = true) {
   }
   const data = await response.json();
   createCard(data);
-  if (shouldSave) {
-    const alreadyExists = allPokemonData.some(pokemon => pokemon.id === data.id);
-    if (!alreadyExists) {
-      allPokemonData.push(data);}
+  if (shouldSave && !allPokemonData.some(p => p.id === data.id)) {
+    allPokemonData.push(data);
   }
   return data;
 }
@@ -53,21 +58,21 @@ async function getPokemon(i, shouldSave = true) {
 async function loadAllPokemonNames() {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
   const data = await response.json();
-  allPokemonName = data.results.map((pokemon) => pokemon.name);
+  allPokemonName = data.results.map(pokemon => pokemon.name);
 }
 
 async function fetchAndDisplayFilteredPokemon(filteredPokemon) {
   const spinner = document.getElementById("spinner-overlay");
   spinner.classList.remove("hidden");
-  for (const name of filteredPokemon) {
-    const data = await getPokemon(name, false);
-    if (data && data.id <= 1025) {
+  const promises = filteredPokemon.map(name => getPokemon(name, false));
+  const results = await Promise.all(promises);
+  results.forEach(data => {
+    if (data && data.id <= 1025 && !searchedPokemonData.some(p => p.id === data.id)) {
       searchedPokemonData.push(data);
     }
-  }
+  });
   spinner.classList.add("hidden");
 }
-
 
 async function resetSearch() {
   document.getElementById("pokemon-list").innerHTML = "";
@@ -101,15 +106,12 @@ function resetToStartView() {
   const pokemonList = document.getElementById("pokemon-list");
   const loadMoreButton = document.getElementById("load-more-button");
   pokemonList.innerHTML = "";
-  allPokemonData.forEach((pokemon) => createCard(pokemon));
+  allPokemonData.forEach(pokemon => createCard(pokemon));
   loadMoreButton.parentElement.classList.remove("hidden");
 }
 
 function showDetails(pokemonId) {
-  let pokemon = allPokemonData.find(p => p.id === pokemonId);
-  if (!pokemon) {
-    pokemon = searchedPokemonData.find(p => p.id === pokemonId);
-  }
+  let pokemon = allPokemonData.find(p => p.id === pokemonId) || searchedPokemonData.find(p => p.id === pokemonId);
   if (!pokemon) {
     alert("No Pokemon found!");
     return;
@@ -131,8 +133,8 @@ function closeDetails() {
 document.getElementById("pokemon-details").addEventListener("click", function(event) {
   if (event.target.id === "pokemon-details") {
     closeDetails();
-  }}
-);
+  }
+});
 
 function showPreviousPokemon(currentId) {
   const currentIndex = allPokemonData.findIndex(pokemon => pokemon.id === currentId);
@@ -163,6 +165,7 @@ function showTab(tabName) {
     statsTab.classList.remove("hidden");
   }
 }
+
 
 
 
